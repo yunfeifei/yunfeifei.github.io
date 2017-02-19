@@ -2,13 +2,13 @@ theme: jekyll-theme-cayman
 
 # Setup
 title:        雲霏霏的博客
-tagline:      A responsive theme for your project on GitHub Pages
+tagline:      不积跬步，无以至千里。
 baseurl:      ""
 paginate:     1
 
 # About/contact
 author:
-  name:       雲霏霏
+  name:       yunfeifei
   url:        http://yunfeifei.github.io
 
 # Gems
