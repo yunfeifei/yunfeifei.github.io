@@ -1,7 +1,7 @@
 ---
 layout: default
-title:  "Gulp入门指南!"
-date:   2017-02-28 19:15:00
+title: "Gulp入门与解惑!"
+date: 2017-02-28 19:15:00
 categories: main
 ---
 
@@ -31,7 +31,8 @@ Local gulp not found in ~\your-path
 ```
 这是为什么呢？
 
-> 其实这是Gulp故意设计的，原因是为了版本和依赖的控制。意思就是当别人Fork你代码，或者你过段时间拷贝到别的电脑上再gulp的时候，能控制gulp的版本和其他插件的版本。
+> 其实这是Gulp故意设计的，原因是为了版本和依赖的控制。意思就是当别人Fork你代码，或者你过段时间拷贝到别的电脑上再gulp的时候，能控制gulp的版本
+和其他插件的版本。
 
 > 同时，这也是为了方便你在不同的项目中使用不同版本的gulp，如果仅在全局装一个 gulp 所有的项目就只能使用同一个版本的 gulp 了。
 
@@ -39,13 +40,17 @@ Local gulp not found in ~\your-path
 本地安装并记录在package.json的devDependencies下，能保证所以引用你项目的人都能用同个版本的gulp。另外，使用package.json中scripts来执行gulp命令
 的话可以无需安装全局包。
 
-在这里可以看看大家的讨论：[Why do we need to install gulp globally and locally?](http://stackoverflow.com/questions/22115400/why-do-we-need-to-install-gulp-globally-and-locally)
+在这里可以看看大家的讨论：
+[Why do we need to install gulp globally and locally?](http://stackoverflow.com/questions/22115400/why-do-we-need-to-install-gulp-globally-and-locally)
+
+
 
 ## Npm的包管理
 
 当我们创建一个项目时，我们要现在项目中创建一个package.json文件，那么这个文件时干什么用的呢？
 
 从字面意思和文件名称上看，我们就可以知道是包管理的配置文件。下面我们来说说这个配置文件如何创建和使用！
+
 
 ### npm init创建package.json
 
@@ -57,6 +62,205 @@ Local gulp not found in ~\your-path
 nmp init
 ```
 会出现以下提示：
-![npm init界面](images/2017-02-28_201653.jpg)
+
+![npm init界面](/images/2017-02-28_201653.jpg)
+
+这里让我们输入项目名称，我们输入我们的项目名称，比如myapp。然后回车继续...，
+后面会让我们输入项目的版本(version),描述(description),入口(main)等信息。
+
+#### Package.json 属性说明
+* name - 包名。
+* version - 包的版本号。
+* description - 包的描述。
+* homepage - 包的官网 url 。
+* author - 包的作者姓名。
+* contributors - 包的其他贡献者姓名。
+* dependencies - 依赖包列表。如果依赖包没有安装，npm 会自动将依赖包安装在 node_module 目录下。
+* repository - 包代码存放的地方的类型，可以是 git 或 svn，git 可在 Github 上。
+* main - main 字段是一个模块ID，它是一个指向你程序的主要项目。就是说，如果你包的名字叫 express，然后用户安装它，然后require("express")。
+* keywords - 关键字
 
 
+有时候，我们fork别的代码时，会看到devDependencies这个配置项，关于devDependencies这个配置项，我们下面来专门讲他。
+其实这个配置项是npm来管理的，当我们使用npm install命令来安装一些插件时，npm会自动的更新package.json加入依赖项。下面我们来实际操作一下，
+首先，我们在D盘(哪个盘随意)下建个文件夹，比如gulpdemo，然后，"开始" -> "运行" -> "cmd"，打开DOS命令窗口，执行cd命令，将路径定位到这个目录下。
+既然package.json是管理依赖包的，那么我们第一步当然是添加package.json了。下面是具体的步骤：
+
+
+1. 在DOS窗口，输入npm init命令：
+
+```javascript
+nmp init
+```
+
+然后，按照操作，一次输入配置信息，最后生成的package.json大概如下：
+
+```javascript
+{
+  "name": "myapp",
+  "version": "1.0.0",
+  "description": "My web app",
+  "main": "index.html",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "yunfeifei",
+  "license": "ISC"
+}
+```
+
+这个每个人输入的信息不同，会或多或少少几项，这个没关系，我们可以参照上面的配置项说明来根据情况具体修改配置。
+
+
+2. 安装Gulp
+
+上面我们已经说过，虽然已经全局安装过gulp，但是每个项目还是要基于项目依赖安装的，我们执行以下命令进行安装：
+
+```javascript
+npm install --save-dev gulp
+```
+
+执行完命令，安装成功后，我们再来看看package.json文件，发现里面多了devDependencies这个配置:
+
+```javacript
+{
+  "name": "myapp",
+  "version": "1.0.0",
+  "description": "My web app",
+  "main": "gulpfile.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "yunfeifei",
+  "license": "ISC",
+  "devDependencies": {
+    "gulp": "^3.9.1"
+  }
+}
+```
+
+依赖标明了模块名称和版本号，这样方便以后别人使用，具体的使用方法随后会说明。
+
+> 当我们发布项目的时候，并不会把gulp的模块都打包发布，只是发布我们的源代码和一些必要的配置文件。
+就如.Net和Java的包管理工具一样，只生成一个配置文件，后面再由包管理工具进行解析、还原。
+
+
+到这里，关于package.json的创建和使用相信大家已经清楚了，下面我们来介绍一下gulp常用的一些插件和使用方法。
+
+
+
+### Gulp常用插件和使用简介
+
+Gulp常用的一些功能就是文件拷贝、文件重命名(gulp-rename)、文件合并(gulp-concat)、文件拷贝(gulp-copy)、文件删除(del)、文本替换(gulp-replace)、
+js语法检测(gulp-jshint)、js压缩(gulp-uglify)、html压缩(gulp-htmlmin)、css压缩(gulp-clean-css)和图片压缩(gulp-imagemin)。
+
+下面，写一个例子，实现js的语法检测和压缩合并功能，其他的插件和功能，大家可以通过网上找资料进行学习。
+
+这个例子中我们要用到一下模块:
+
+* js语法检测(gulp-jshint)
+* js压缩(gulp-uglify)
+* 文件合并(gulp-concat)
+* 文件重命名(gulp-rename)
+
+我们执行以下命令来安装这些模块：
+
+```javascript
+npm install gulp-concat gulp-uglify gulp-rename jshint gulp-jshint --save-dev
+```
+
+安装成功后，我们在文件夹下新建gulpfile.js和js文件夹，目录结构如下：
+
+![目录结构](/images/2017-02-28_212126.jpg)
+
+> gulpfile.js又称gulp入口文件，主要用来进行任务配置，告诉gulp需要进行哪些操作。
+
+下面，我们修改gulpfile.js，写入以下代码：
+
+```javascript
+var gulp = require('gulp'),
+    concat = require('gulp-concat'),
+    uglify = require('gulp-uglify'),
+    rename = require('gulp-rename'),
+    jshint = require('gulp-jshint');
+
+//语法检查
+gulp.task('jshint',function () {
+    return gulp.src('js/*.js')
+        .pipe(jshint())
+        .pipe(jshint.reporter('default'));
+});
+
+//压缩，合并 js
+gulp.task('minifyjs', function() {
+    return gulp.src('js/*.js')      //需要操作的文件
+        .pipe(concat('main.js'))    //合并所有js到main.js
+        .pipe(gulp.dest('js'))       //输出到文件夹
+        .pipe(rename({suffix: '.min'}))   //rename压缩后的文件名
+        .pipe(uglify())    //压缩
+        .pipe(gulp.dest('js'));  //输出
+});
+
+//默认命令，在cmd中输入gulp后，执行的就是这个任务(压缩js需要在检查js之后操作)
+gulp.task('default',['jshint'],function() {
+    gulp.start('minifyjs'); 
+});
+```
+
+代码中都加了注释，相信大家都能看的懂，具体的语法和命令，大家可以去看看[Gulp官网的API文档](http://www.gulpjs.com.cn/docs/api/)。
+
+然后，我们在js文件中新建两个js文件，index.js和common.js,分别写入一些代码，如下：
+
+index.js
+
+```javacript
+alert("hello,world");
+function ShowAlert() {
+    alert("Hello,world!");
+}
+```
+
+js和common.js
+
+```javacript
+function ShowMessage() {
+    alert("Hello,this is a message!");
+}
+```
+
+然后，我们在DOS窗口执行gulp命令，如图：
+
+![gulp执行默认任务](/images/2017-02-28_213219.jpg)
+
+从图中我们可以看到，先执行了
+执行完成后，我们会发现js目录中，多出了两个js文件，分别是main.js和main.min.js,其中main.js很明显是index.js和common.js合并后的内容。
+main.min.js是main.js的压缩版。
+
+开发环境中，我们肯定是要把生成目录和源代码目录分开的，这个为了减少操作，降低复杂度，让大家容易理解，所以只建了一个目录。
+
+
+
+### npm 解析依赖项
+
+上面我们说了当我们创建项目时，npm会自动添加依赖模块配置到package.json，现在我们来说一下，如何使用这个package.json来还原依赖项。
+
+上面我们写的一个小例子，假如我们要发给别人，我们会发现，他们直接执行gulp命令来执行任务，是无法执行成功的，提示缺少某些模块。
+
+这个时候，我们在DOS下进入这个目录，执行npm install命令，npm就会读取package.js里面的依赖项，进行安装，然后我们就可以正常的执行gulp命令，
+执行gulp任务了。
+
+
+
+### npm安装包失败的问题
+
+国内的话，执行npm install包时，会出现卡住的现象，这个你不要问我问什么，我不会告诉你的！
+
+我们可以使用的淘宝的npm镜像，用淘宝定制的 cnpm (gzip 压缩支持) 命令行工具代替默认的 npm：
+
+淘宝 NPM 镜像是一个完整 npmjs.org 镜像，你可以用此代替官方版本(只读)，同步频率目前为 10分钟 一次以保证尽量与官方服务同步。
+
+```javacript
+npm install -g cnpm --registry=https://registry.npm.taobao.org
+```
+
+其用法是和npm一样的。
