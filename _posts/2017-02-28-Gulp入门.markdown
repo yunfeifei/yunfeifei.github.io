@@ -1,0 +1,62 @@
+---
+layout: default
+title:  "Gulp入门指南!"
+date:   2017-02-28 19:15:00
+categories: main
+---
+
+## Gulp简介
+
+Gulp.js 是一个自动化构建工具,开发者可以使用它在项目开发过程中自动执行常见任务。Gulp.js是基于 Node.js构建的,利用Node.js流的威力,你可以快速构建项目。
+
+## 安装Gulp
+
+### 1、全局安装Gulp:
+
+```javacript
+npm install --global gulp
+```
+
+### 2、作为项目的开发依赖（devDependencies）安装：
+
+```javacript
+npm install --save-dev gulp
+```
+
+### 小贴士
+
+使用过Gulp的人会碰到一个问题，明明全局已经安装了Gulp和Gulp的插件，但是在项目中执行Gulp命令会出现如下错误：
+```javacript
+Local gulp not found in ~\your-path
+```
+这是为什么呢？
+
+> 其实这是Gulp故意设计的，原因是为了版本和依赖的控制。意思就是当别人Fork你代码，或者你过段时间拷贝到别的电脑上再gulp的时候，能控制gulp的版本和其他插件的版本。
+
+> 同时，这也是为了方便你在不同的项目中使用不同版本的gulp，如果仅在全局装一个 gulp 所有的项目就只能使用同一个版本的 gulp 了。
+
+> 全局安装用于在命令行中使用gulp命令执行gulp的任务，本地安装是由于每个gulpfile.js都依赖gulp，该文件中依赖的gulp会直接从项目的node_module文件去找。
+本地安装并记录在package.json的devDependencies下，能保证所以引用你项目的人都能用同个版本的gulp。另外，使用package.json中scripts来执行gulp命令
+的话可以无需安装全局包。
+
+在这里可以看看大家的讨论：[Why do we need to install gulp globally and locally?](http://stackoverflow.com/questions/22115400/why-do-we-need-to-install-gulp-globally-and-locally)
+
+## Npm的包管理
+
+当我们创建一个项目时，我们要现在项目中创建一个package.json文件，那么这个文件时干什么用的呢？
+
+从字面意思和文件名称上看，我们就可以知道是包管理的配置文件。下面我们来说说这个配置文件如何创建和使用！
+
+### npm init创建package.json
+
+对于很多刚开始学习gulp的人来说，对package.json一无所知，更比说创建了；网上有很多的模板，但是我们不能总是依赖于模板吧，万一哪天断网呢？
+
+其实，官网已经想到了这一点，我们可以通过以下命令来创建：
+
+```javascript
+nmp init
+```
+会出现以下提示：
+![npm init界面](images/2017-02-28_201653.jpg)
+
+
